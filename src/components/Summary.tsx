@@ -4,6 +4,7 @@ import { County } from '../data/counties';
 import { calculateTax, TaxInfo } from '../utils/calculateTax';
 import { Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
 import { Table } from '@chakra-ui/react';
+import { roundToTwo } from '../utils/roundToTwo';
 
 interface Props {
   records: Transaction[];
@@ -75,22 +76,22 @@ export const Summary: React.FC<Props> = ({ records }) => {
           {Object.values(recordsByCounty).map(({ county, transactions, totals }) => (
             <Tr>
               <Td>{county.name}</Td>
-              <Td isNumeric>{transactions.length}</Td>
-              <Td isNumeric>{totals.countyTax}</Td>
-              <Td isNumeric>{totals.foodTax}</Td>
-              <Td isNumeric>{totals.stateTax}</Td>
-              <Td isNumeric>{totals.total}</Td>
+              <Td isNumeric>{roundToTwo(transactions.length)}</Td>
+              <Td isNumeric>{roundToTwo(totals.countyTax)}</Td>
+              <Td isNumeric>{roundToTwo(totals.foodTax)}</Td>
+              <Td isNumeric>{roundToTwo(totals.stateTax)}</Td>
+              <Td isNumeric>{roundToTwo(totals.total)}</Td>
             </Tr>
           ))}
         </Tbody>
         <Tfoot>
           <Tr>
             <Th>Total</Th>
-            <Th isNumeric>{fullTotals.transactionCount}</Th>
-            <Th isNumeric>{fullTotals.countyTax}</Th>
-            <Th isNumeric>{fullTotals.foodTax}</Th>
-            <Th isNumeric>{fullTotals.stateTax}</Th>
-            <Th isNumeric>{fullTotals.total}</Th>
+            <Th isNumeric>{roundToTwo(fullTotals.transactionCount)}</Th>
+            <Th isNumeric>{roundToTwo(fullTotals.countyTax)}</Th>
+            <Th isNumeric>{roundToTwo(fullTotals.foodTax)}</Th>
+            <Th isNumeric>{roundToTwo(fullTotals.stateTax)}</Th>
+            <Th isNumeric>{roundToTwo(fullTotals.total)}</Th>
           </Tr>
         </Tfoot>
       </Table>

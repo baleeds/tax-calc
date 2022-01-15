@@ -4,6 +4,7 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  Heading,
   Input,
   NumberInput,
   NumberInputField,
@@ -75,7 +76,10 @@ export const TaxCalc: React.FC = () => {
     <div className="main">
       <div className="entry">
         <form onSubmit={handleSubmit}>
-          <VStack spacing={4} align="stretch">
+          <VStack spacing={5} align="stretch">
+            <Heading as="h3" size="lg">
+              NC Tax Calculator
+            </Heading>
             <FormControl>
               <FormLabel htmlFor="state">State</FormLabel>
               <Select
@@ -130,7 +134,6 @@ export const TaxCalc: React.FC = () => {
               <NumberInput defaultValue={0} precision={2} value={fullTotal} disabled={true}>
                 <NumberInputField />
               </NumberInput>
-              <FormHelperText>The food subtotal before taxes</FormHelperText>
             </FormControl>
 
             <Button colorScheme="teal" type="submit">
