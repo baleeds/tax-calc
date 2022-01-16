@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Transaction } from './Transaction';
-import { County } from '../data/counties';
-import { calculateTax, TaxInfo } from '../utils/calculateTax';
+import { County, countyMap } from '../data/counties';
+import { TaxInfo } from '../utils/calculateTax';
 import { Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
 import { Table } from '@chakra-ui/react';
 import { roundToTwo } from '../utils/roundToTwo';
@@ -12,9 +12,12 @@ interface Props {
 
 export const Summary: React.FC<Props> = ({ records }) => {
   const recordsByCounty = records.reduce((acc, record) => {
-    if (!acc[record.county.id]) {
-      acc[record.county.id] = {
-        county: record.county,
+    const recordCounty = countyMap[record.countyId];
+    if (!recordCounty) return acc;
+
+    if (!acc[recordCounty.id]) {
+      acc[recordCounty.id] = {
+        county: recordCounty,
         transactions: [],
         totals: {
           countyTax: 0,
@@ -25,20 +28,15 @@ export const Summary: React.FC<Props> = ({ records }) => {
       };
     }
 
-    const taxInfo = calculateTax(record.county, record.subTotal, record.foodSubTotal);
+    acc[recordCounty.id].transactions.push(record);
 
-    acc[record.county.id].transactions.push({
-      ...record,
-      taxInfo,
-    });
-
-    acc[record.county.id].totals.countyTax += taxInfo.countyTax;
-    acc[record.county.id].totals.total += taxInfo.total;
-    acc[record.county.id].totals.foodTax += taxInfo.foodTax;
-    acc[record.county.id].totals.stateTax += taxInfo.stateTax;
+    acc[recordCounty.id].totals.countyTax += record.taxInfo.countyTax;
+    acc[recordCounty.id].totals.total += record.taxInfo.total;
+    acc[recordCounty.id].totals.foodTax += record.taxInfo.foodTax;
+    acc[recordCounty.id].totals.stateTax += record.taxInfo.stateTax;
 
     return acc;
-  }, {} as Record<number, { county: County; transactions: Array<Transaction & { taxInfo: TaxInfo }>; totals: TaxInfo }>);
+  }, {} as Record<string, { county: County; transactions: Transaction[]; totals: TaxInfo }>);
 
   const fullTotals = Object.values(recordsByCounty).reduce(
     (acc, group) => {

@@ -18,3 +18,13 @@
   padding: 24px;
   width: calc(100vw - 400px);
 }
+
+.transaction__icon-container {
+  opacity: 0%;
+  pointer-events: none;
+}
+
+.transaction:hover .transaction__icon-container {
+  opacity: 100%;
+  pointer-events: unset;
+}

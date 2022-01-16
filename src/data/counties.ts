@@ -1,20 +1,25 @@
 ﻿export interface County {
-  id: number;
+  id: string;
   name: string;
   taxRate: number;
 }
 
 export const counties: County[] = [
   {
-    id: 1,
+    id: 'buncombe',
     name: 'Buncombe',
     taxRate: 2.25,
   },
   {
-    id: 2,
+    id: 'avery',
     name: 'Avery',
     taxRate: 2,
   },
 ];
 
 export const countyOptions = counties.map((county) => ({ label: county.name, value: county }));
+
+export const countyMap = counties.reduce((acc, county) => {
+  acc[county.id] = county;
+  return acc;
+}, {} as Record<string, County>);

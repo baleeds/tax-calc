@@ -1,4 +1,4 @@
-﻿import React, { FormEvent, useMemo, useRef, useState } from 'react';
+﻿import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Button,
   FormControl,
@@ -19,21 +19,26 @@ import {
 import { v4 as uuid } from 'uuid';
 import { toDecimal } from '../utils/toDecimal';
 import { Select } from 'chakra-react-select';
-import { County, countyOptions } from '../data/counties';
-import { textPlaceholder } from '../utils/placeholder';
+import { countyOptions } from '../data/counties';
 import { calculateTax } from '../utils/calculateTax';
 import { Transaction } from './Transaction';
 import { Summary } from './Summary';
+import { storage } from '../data/localStorage';
+import { Header } from './Header';
 
 export const TaxCalc: React.FC = () => {
   const toast = useToast();
 
-  const [records, setRecords] = useState<Transaction[]>([]);
+  const [records, setRecords] = useState<Transaction[]>(storage.transactions.get());
 
   const [description, setDescription] = useState('');
   const [subTotalAmount, setSubTotalAmount] = useState('0.00');
   const [foodSubTotalAmount, setFoodSubTotalAmount] = useState('0.00');
   const [countyOption, setCountyOption] = useState(countyOptions[0]);
+
+  useEffect(() => {
+    storage.transactions.set(records);
+  }, [records]);
 
   const descriptionFieldRef = useRef<HTMLInputElement>(null);
 
@@ -49,15 +54,32 @@ export const TaxCalc: React.FC = () => {
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
+    const subTotalNumber = toDecimal(subTotalAmount);
+    const foodSubTotalNumber = toDecimal(foodSubTotalAmount);
+
+    if (subTotalNumber === undefined || foodSubTotalNumber === undefined || countyOption?.value === undefined) {
+      toast({
+        title: 'Cannot add transaction',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const taxInfo = calculateTax(countyOption.value, subTotalNumber, foodSubTotalNumber);
+
     const newRecord: Transaction = {
       id: uuid(),
-      county: countyOption.value,
+      countyId: countyOption.value.id,
       description,
-      subTotal: toDecimal(subTotalAmount) ?? 0,
-      foodSubTotal: toDecimal(foodSubTotalAmount) ?? 0,
+      taxInfo,
     };
 
     setRecords((r) => [...r, newRecord]);
+
+    descriptionFieldRef.current?.focus();
+
     setDescription('');
     setSubTotalAmount('0.00');
     setFoodSubTotalAmount('0.00');
@@ -68,25 +90,43 @@ export const TaxCalc: React.FC = () => {
       duration: 3000,
       isClosable: true,
     });
-
-    descriptionFieldRef.current?.focus();
   }
+
+  const deleteTransaction = (transactionId: string) => {
+    setRecords((p) => p.filter((r) => r.id !== transactionId));
+
+    toast({
+      title: 'Transaction removed.',
+      status: 'warning',
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
+  const resetTransactions = () => {
+    setRecords([]);
+
+    toast({
+      title: 'All transactions removed.',
+      status: 'warning',
+      duration: 3000,
+      isClosable: true,
+    });
+  };
 
   return (
     <div className="main">
       <div className="entry">
         <form onSubmit={handleSubmit}>
           <VStack spacing={5} align="stretch">
-            <Heading as="h3" size="lg">
-              NC Tax Calculator
-            </Heading>
+            <Header resetTransactions={resetTransactions} />
             <FormControl>
-              <FormLabel htmlFor="state">State</FormLabel>
+              <FormLabel htmlFor="county">County</FormLabel>
               <Select
                 options={countyOptions}
                 value={countyOption}
                 onChange={(options) => setCountyOption(options ?? countyOptions[0])}
-              ></Select>
+              />
             </FormControl>
 
             <FormControl>
@@ -152,8 +192,13 @@ export const TaxCalc: React.FC = () => {
           <TabPanels>
             <TabPanel>
               <VStack spacing={3} align="stretch">
+                {records.length === 0 && (
+                  <Heading as="h4" size="md" color="gray.500">
+                    Enter transactions to the left to get started.
+                  </Heading>
+                )}
                 {records.map((transaction) => (
-                  <Transaction transaction={transaction} />
+                  <Transaction transaction={transaction} deleteTransaction={deleteTransaction} />
                 ))}
               </VStack>
             </TabPanel>
