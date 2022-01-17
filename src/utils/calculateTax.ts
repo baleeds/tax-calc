@@ -25,3 +25,20 @@ export function calculateTax(county: County, subtotal: number, foodOnlySubtotal:
     foodTax,
   };
 }
+
+export function splitCountyAndStateTax(taxAmount: number, county: County): { countyTax: number; stateTax: number } {
+  const totalTaxRate = STATE_TAX_RATE + county.taxRate;
+
+  const countyTax = roundToTwo((taxAmount / totalTaxRate) * county.taxRate);
+  const stateTax = roundToTwo((taxAmount / totalTaxRate) * STATE_TAX_RATE);
+
+  return { countyTax, stateTax };
+}
+
+export function getTotalForTaxAmounts(nonFoodTax: number, foodTax: number, county: County): number {
+  const nonFoodTaxRate = STATE_TAX_RATE + county.taxRate;
+  const nonFoodSubTotal = nonFoodTax / (nonFoodTaxRate / 100);
+  const foodSubTotal = foodTax / (FOOD_TAX_RATE / 100);
+
+  return roundToTwo(nonFoodSubTotal + nonFoodTax + foodSubTotal + foodTax);
+}
