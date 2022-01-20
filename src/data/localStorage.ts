@@ -11,6 +11,8 @@ const taxInfoSchema = Yup.object().shape({
   stateTax: Yup.number().required(),
   countyTax: Yup.number().required(),
   foodTax: Yup.number().required(),
+  foodSubtotal: Yup.number().required(),
+  nonFoodSubtotal: Yup.number().required(),
 });
 
 const transactionSchema = Yup.object().shape({

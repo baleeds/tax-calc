@@ -1,7 +1,6 @@
 ﻿import { Transaction } from './Transaction';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Box,
   Button,
   FormControl,
   FormErrorMessage,
@@ -10,17 +9,9 @@ import {
   Input,
   NumberInput,
   NumberInputField,
-  Stat,
-  StatGroup,
-  StatHelpText,
-  StatLabel,
-  StatNumber,
   Table,
   Tbody,
   Td,
-  Tfoot,
-  Th,
-  Thead,
   Tr,
   useToast,
   VStack,
@@ -30,7 +21,6 @@ import { toDecimal } from '../utils/toDecimal';
 import { calculateTax } from '../utils/calculateTax';
 import { v4 as uuid } from 'uuid';
 import { Select } from 'chakra-react-select';
-import { roundToTwo } from '../utils/roundToTwo';
 import { toCurrency } from '../utils/toCurrency';
 
 export interface EntryFormProps {
