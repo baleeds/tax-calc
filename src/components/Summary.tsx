@@ -20,8 +20,10 @@ export const Summary: React.FC<Props> = ({ records }) => {
         county: recordCounty,
         transactions: [],
         totals: {
-          countyTax: 0,
           total: 0,
+          nonFoodSubtotal: 0,
+          foodSubtotal: 0,
+          countyTax: 0,
           stateTax: 0,
           foodTax: 0,
         },
@@ -34,6 +36,8 @@ export const Summary: React.FC<Props> = ({ records }) => {
     acc[recordCounty.id].totals.total += record.taxInfo.total;
     acc[recordCounty.id].totals.foodTax += record.taxInfo.foodTax;
     acc[recordCounty.id].totals.stateTax += record.taxInfo.stateTax;
+    acc[recordCounty.id].totals.foodSubtotal += record.taxInfo.foodSubtotal;
+    acc[recordCounty.id].totals.nonFoodSubtotal += record.taxInfo.nonFoodSubtotal;
 
     return acc;
   }, {} as Record<string, { county: County; transactions: Transaction[]; totals: TaxInfo }>);
@@ -45,6 +49,8 @@ export const Summary: React.FC<Props> = ({ records }) => {
       acc.stateTax += group.totals.stateTax;
       acc.foodTax += group.totals.foodTax;
       acc.transactionCount += group.transactions.length;
+      acc.foodSubtotal += group.totals.foodSubtotal;
+      acc.nonFoodSubtotal += group.totals.nonFoodSubtotal;
 
       return acc;
     },
@@ -54,6 +60,8 @@ export const Summary: React.FC<Props> = ({ records }) => {
       countyTax: 0,
       stateTax: 0,
       transactionCount: 0,
+      nonFoodSubtotal: 0,
+      foodSubtotal: 0,
     } as TaxInfo & { transactionCount: number },
   );
 

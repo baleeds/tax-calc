@@ -4,6 +4,8 @@ import BigNumber from 'bignumber.js';
 
 export interface TaxInfo {
   total: number;
+  foodSubtotal: number;
+  nonFoodSubtotal: number;
   stateTax: number;
   countyTax: number;
   foodTax: number;
@@ -12,12 +14,12 @@ export interface TaxInfo {
 const STATE_TAX_RATE = new BigNumber(4.75);
 const FOOD_TAX_RATE = new BigNumber(2.0);
 
-export function calculateTax(county: County, subtotal: number, foodOnlySubtotal: number): TaxInfo {
-  const nonFoodSubtotal = subtotal - foodOnlySubtotal;
+export function calculateTax(county: County, subtotal: number, foodSubtotal: number): TaxInfo {
+  const nonFoodSubtotal = subtotal - foodSubtotal;
 
   const countyTax = roundToTwo((nonFoodSubtotal / 100) * county.taxRate);
   const stateTax = roundToTwo((nonFoodSubtotal / 100) * STATE_TAX_RATE.toNumber());
-  const foodTax = roundToTwo((foodOnlySubtotal / 100) * FOOD_TAX_RATE.toNumber());
+  const foodTax = roundToTwo((foodSubtotal / 100) * FOOD_TAX_RATE.toNumber());
   const total = roundToTwo(subtotal + stateTax + foodTax + countyTax);
 
   return {
@@ -25,6 +27,8 @@ export function calculateTax(county: County, subtotal: number, foodOnlySubtotal:
     stateTax,
     countyTax,
     foodTax,
+    foodSubtotal,
+    nonFoodSubtotal,
   };
 }
 
