@@ -30,19 +30,11 @@ import { calculateTax } from '../utils/calculateTax';
 import { v4 as uuid } from 'uuid';
 import { Select } from 'chakra-react-select';
 import { roundToTwo } from '../utils/roundToTwo';
+import { toCurrency } from '../utils/toCurrency';
 
 export interface EntryFormProps {
   addTransaction: (transaction: Transaction) => void;
 }
-
-var formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
-
-const toCurrency = (num: number) => {
-  return formatter.format(num);
-};
 
 export const EntryForm: React.FC<EntryFormProps> = (props) => {
   const toast = useToast();
@@ -217,8 +209,12 @@ export const EntryForm: React.FC<EntryFormProps> = (props) => {
               </Td>
             </Tr>
             <Tr>
-              <Td>Full total</Td>
-              <Td isNumeric>{toCurrency(taxInfo?.total ?? 0)}</Td>
+              <Td>
+                <strong>Full total</strong>
+              </Td>
+              <Td isNumeric>
+                <strong>{toCurrency(taxInfo?.total ?? 0)}</strong>
+              </Td>
             </Tr>
           </Tbody>
         </Table>

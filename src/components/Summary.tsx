@@ -2,9 +2,8 @@
 import { Transaction } from './Transaction';
 import { County, countyMap } from '../data/counties';
 import { TaxInfo } from '../utils/calculateTax';
-import { Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
-import { Table } from '@chakra-ui/react';
-import { roundToTwo } from '../utils/roundToTwo';
+import { Table, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
+import { toCurrency } from '../utils/toCurrency';
 
 interface Props {
   records: Transaction[];
@@ -75,29 +74,35 @@ export const Summary: React.FC<Props> = ({ records }) => {
             <Th isNumeric>County tax</Th>
             <Th isNumeric>Food tax</Th>
             <Th isNumeric>State tax</Th>
+            <Th isNumeric>Subtotal</Th>
             <Th isNumeric>Total</Th>
           </Tr>
         </Thead>
         <Tbody>
           {Object.values(recordsByCounty).map(({ county, transactions, totals }) => (
             <Tr>
-              <Td>{county.name}</Td>
-              <Td isNumeric>{roundToTwo(transactions.length)}</Td>
-              <Td isNumeric>{roundToTwo(totals.countyTax)}</Td>
-              <Td isNumeric>{roundToTwo(totals.foodTax)}</Td>
-              <Td isNumeric>{roundToTwo(totals.stateTax)}</Td>
-              <Td isNumeric>{roundToTwo(totals.total)}</Td>
+              <Td>
+                {county.name}
+                <span style={{ opacity: 0.6 }}> - {county.taxRate}%</span>
+              </Td>
+              <Td isNumeric>{toCurrency(transactions.length)}</Td>
+              <Td isNumeric>{toCurrency(totals.countyTax)}</Td>
+              <Td isNumeric>{toCurrency(totals.foodTax)}</Td>
+              <Td isNumeric>{toCurrency(totals.stateTax)}</Td>
+              <Td isNumeric>{toCurrency(totals.foodSubtotal + totals.nonFoodSubtotal)}</Td>
+              <Td isNumeric>{toCurrency(totals.total)}</Td>
             </Tr>
           ))}
         </Tbody>
         <Tfoot>
           <Tr>
             <Th>Total</Th>
-            <Th isNumeric>{roundToTwo(fullTotals.transactionCount)}</Th>
-            <Th isNumeric>{roundToTwo(fullTotals.countyTax)}</Th>
-            <Th isNumeric>{roundToTwo(fullTotals.foodTax)}</Th>
-            <Th isNumeric>{roundToTwo(fullTotals.stateTax)}</Th>
-            <Th isNumeric>{roundToTwo(fullTotals.total)}</Th>
+            <Th isNumeric>{toCurrency(fullTotals.transactionCount)}</Th>
+            <Th isNumeric>{toCurrency(fullTotals.countyTax)}</Th>
+            <Th isNumeric>{toCurrency(fullTotals.foodTax)}</Th>
+            <Th isNumeric>{toCurrency(fullTotals.stateTax)}</Th>
+            <Th isNumeric>{toCurrency(fullTotals.foodSubtotal + fullTotals.nonFoodSubtotal)}</Th>
+            <Th isNumeric>{toCurrency(fullTotals.total)}</Th>
           </Tr>
         </Tfoot>
       </Table>
