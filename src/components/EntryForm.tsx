@@ -1,6 +1,7 @@
 ﻿import { Transaction } from './Transaction';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  Box,
   Button,
   FormControl,
   FormErrorMessage,
@@ -163,26 +164,6 @@ export const EntryForm: React.FC<EntryFormProps> = (props) => {
             <FormHelperText>The food subtotal before taxes</FormHelperText>
           )}
         </FormControl>
-
-        {/*<StatGroup>*/}
-        {/*  <Stat>*/}
-        {/*    <StatLabel>Total</StatLabel>*/}
-        {/*    <StatNumber>${ taxInfo?.total ?? '0.00' }</StatNumber>*/}
-        {/*    <StatHelpText>Tax: ${taxInfo?.totalTax ?? '0.00' }</StatHelpText>*/}
-        {/*  </Stat>*/}
-
-        {/*  <Stat>*/}
-        {/*    <StatLabel>Non-Food Tax</StatLabel>*/}
-        {/*    <StatNumber>${ taxInfo?. ?? '0.00' }</StatNumber>*/}
-        {/*    /!*<StatHelpText>Tax: ${taxInfo?.totalTax ?? '0.00' }</StatHelpText>*!/*/}
-        {/*  </Stat>*/}
-        {/*  */}
-        {/*  <Stat>*/}
-        {/*      <StatLabel>Total</StatLabel>*/}
-        {/*      <StatNumber>${ taxInfo?.total ?? '0.00' }</StatNumber>*/}
-        {/*      <StatHelpText>Tax: ${taxInfo?.totalTax ?? '0.00' }</StatHelpText>*/}
-        {/*    </Stat>*/}
-        {/*</StatGroup>*/}
 
         <Table size="sm">
           <Tbody>
