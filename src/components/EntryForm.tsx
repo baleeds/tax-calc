@@ -1,27 +1,25 @@
 ﻿import { Transaction } from './Transaction';
-import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
 import {
   Button,
   FormControl,
-  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Input,
-  NumberInput,
-  NumberInputField,
-  Table,
-  Tbody,
-  Td,
-  Tr,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   useToast,
   VStack,
 } from '@chakra-ui/react';
 import { countyOptions } from '../data/counties';
-import { toDecimal } from '../utils/toDecimal';
-import { calculateTax } from '../utils/calculateTax';
+import { TaxInfo } from '../utils/calculateTax';
 import { v4 as uuid } from 'uuid';
 import { Select } from 'chakra-react-select';
-import { toCurrency } from '../utils/toCurrency';
+import { EntryFormAuto } from './EntryFormAuto';
+import { EntryFormManual } from './EntryFormManual';
 
 export interface EntryFormProps {
   addTransaction: (transaction: Transaction) => void;
@@ -30,25 +28,12 @@ export interface EntryFormProps {
 export const EntryForm: React.FC<EntryFormProps> = (props) => {
   const toast = useToast();
 
+  const resetAuto = useRef<() => void>();
+  const resetManual = useRef<() => void>();
+
   const [description, setDescription] = useState('');
   const [countyOption, setCountyOption] = useState(countyOptions[0]);
-  const [subTotalAmount, setSubTotalAmount] = useState('0.00');
-  const [foodSubTotalAmount, setFoodSubTotalAmount] = useState('0.00');
-
-  const taxInfo = useMemo(() => {
-    const subTotalNumber = toDecimal(subTotalAmount);
-    const foodSubTotalNumber = toDecimal(foodSubTotalAmount);
-
-    if (subTotalNumber === undefined || foodSubTotalNumber === undefined || countyOption?.value === undefined) {
-      return undefined;
-    }
-
-    if (subTotalNumber < foodSubTotalNumber) {
-      return undefined;
-    }
-
-    return calculateTax(countyOption.value, subTotalNumber, foodSubTotalNumber);
-  }, [countyOption, subTotalAmount, foodSubTotalAmount]);
+  const [taxInfo, setTaxInfo] = useState<TaxInfo | undefined>(undefined);
 
   const descriptionFieldRef = useRef<HTMLInputElement>(null);
 
@@ -78,26 +63,9 @@ export const EntryForm: React.FC<EntryFormProps> = (props) => {
     descriptionFieldRef.current?.focus();
 
     setDescription('');
-    setSubTotalAmount('0.00');
-    setFoodSubTotalAmount('0.00');
+    resetAuto.current?.();
+    resetManual.current?.();
   }
-
-  const foodSubtotalError: string | undefined = useMemo(() => {
-    const subTotalNumber = toDecimal(subTotalAmount);
-    const foodSubTotalNumber = toDecimal(foodSubTotalAmount);
-
-    if (subTotalNumber === undefined || foodSubTotalNumber === undefined) {
-      return undefined;
-    }
-
-    if (foodSubTotalNumber > subTotalNumber) {
-      return 'Food subtotal cannot be greater than full subtotal';
-    }
-
-    return undefined;
-  }, [subTotalAmount, foodSubTotalAmount]);
-
-  useEffect(() => {});
 
   return (
     <form onSubmit={handleSubmit}>
@@ -123,72 +91,21 @@ export const EntryForm: React.FC<EntryFormProps> = (props) => {
           <FormHelperText>Optional</FormHelperText>
         </FormControl>
 
-        <FormControl>
-          <FormLabel htmlFor="subTotal">Subtotal</FormLabel>
-          <NumberInput
-            defaultValue={0}
-            precision={2}
-            step={1}
-            value={subTotalAmount}
-            onChange={(value) => setSubTotalAmount(value)}
-          >
-            <NumberInputField />
-          </NumberInput>
-          <FormHelperText>The subtotal before taxes</FormHelperText>
-        </FormControl>
+        <Tabs>
+          <TabList>
+            <Tab>Auto</Tab>
+            <Tab>Manual</Tab>
+          </TabList>
 
-        <FormControl isInvalid={!!foodSubtotalError}>
-          <FormLabel htmlFor="subTotal">Food subtotal</FormLabel>
-          <NumberInput
-            defaultValue={0}
-            precision={2}
-            step={1}
-            value={foodSubTotalAmount}
-            onChange={(value) => setFoodSubTotalAmount(value)}
-          >
-            <NumberInputField />
-          </NumberInput>
-          {foodSubtotalError ? (
-            <FormErrorMessage>{foodSubtotalError}</FormErrorMessage>
-          ) : (
-            <FormHelperText>The food subtotal before taxes</FormHelperText>
-          )}
-        </FormControl>
-
-        <Table size="sm">
-          <Tbody>
-            <Tr>
-              <Td>County tax</Td>
-              <Td isNumeric>{toCurrency(taxInfo?.countyTax ?? 0)}</Td>
-            </Tr>
-            <Tr>
-              <Td>State tax</Td>
-              <Td isNumeric>{toCurrency(taxInfo?.stateTax ?? 0)}</Td>
-            </Tr>
-            <Tr>
-              <Td>State + county</Td>
-              <Td isNumeric>{toCurrency((taxInfo?.countyTax ?? 0) + (taxInfo?.stateTax ?? 0))}</Td>
-            </Tr>
-            <Tr>
-              <Td>Food tax</Td>
-              <Td isNumeric>{toCurrency(taxInfo?.foodTax ?? 0)}</Td>
-            </Tr>
-            <Tr>
-              <Td>Total tax</Td>
-              <Td isNumeric>
-                {toCurrency((taxInfo?.countyTax ?? 0) + (taxInfo?.stateTax ?? 0) + (taxInfo?.foodTax ?? 0))}
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>
-                <strong>Full total</strong>
-              </Td>
-              <Td isNumeric>
-                <strong>{toCurrency(taxInfo?.total ?? 0)}</strong>
-              </Td>
-            </Tr>
-          </Tbody>
-        </Table>
+          <TabPanels>
+            <TabPanel>
+              <EntryFormAuto countyOption={countyOption} setTaxInfo={setTaxInfo} onResetRef={resetAuto} />
+            </TabPanel>
+            <TabPanel>
+              <EntryFormManual countyOption={countyOption} setTaxInfo={setTaxInfo} onResetRef={resetManual} />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
 
         <Button colorScheme="teal" type="submit">
           Add

@@ -507,7 +507,9 @@ export const counties: County[] = [
   },
 ];
 
-export const countyOptions = counties.map((county) => ({ label: county.name, value: county }));
+export type CountyOption = { label: string; value: County };
+
+export const countyOptions = counties.map((county): CountyOption => ({ label: county.name, value: county }));
 
 export const countyMap = counties.reduce((acc, county) => {
   acc[county.id] = county;
