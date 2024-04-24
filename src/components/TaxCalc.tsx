@@ -5,6 +5,8 @@ import { Summary } from './Summary';
 import { storage } from '../data/localStorage';
 import { Header } from './Header';
 import { EntryForm } from './EntryForm';
+import { exportJson } from '../data/exportJson';
+import { importJson } from '../data/importJson';
 
 export const TaxCalc: React.FC = () => {
   const toast = useToast();
@@ -48,11 +50,22 @@ export const TaxCalc: React.FC = () => {
     });
   };
 
+  const exportTransactions = () => {
+    const transactions = storage.transactions.get();
+    const dateForName = new Date().toLocaleDateString();
+    exportJson(transactions, `tax_calc_transactions_${dateForName}`);
+  }
+
+  const importTransactions = async () => {
+    const transactions = await importJson();
+    setRecords(transactions);
+  }
+
   return (
     <div className="main">
       <div className="entry">
         <VStack spacing={5} align="stretch">
-          <Header resetTransactions={resetTransactions} />
+          <Header resetTransactions={resetTransactions} exportTransactions={exportTransactions} importTransactions={importTransactions} />
           <EntryForm addTransaction={addTransaction} />
         </VStack>
       </div>

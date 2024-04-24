@@ -19,10 +19,12 @@ import { SettingsIcon } from '@chakra-ui/icons';
 import React from 'react';
 
 interface Props {
-  resetTransactions: () => void;
+  resetTransactions: () => void,
+  exportTransactions: () => void,
+  importTransactions: () => void
 }
 
-export const Header: React.FC<Props> = ({ resetTransactions }) => {
+export const Header: React.FC<Props> = ({ resetTransactions, exportTransactions, importTransactions }) => {
   const resetTransactionsModal = useDisclosure();
 
   const confirmResetTransactions = () => {
@@ -39,12 +41,15 @@ export const Header: React.FC<Props> = ({ resetTransactions }) => {
         <Menu>
           <MenuButton as={IconButton} aria-label="Options" icon={<SettingsIcon />} variant="outline" />
           <MenuList>
+            <MenuItem onClick={() => exportTransactions()}>Export transactions as JSON</MenuItem>
+            <MenuItem onClick={() => importTransactions()}>Import transactions from JSON</MenuItem>
             <MenuItem onClick={resetTransactionsModal.onOpen}>Reset all transactions</MenuItem>
           </MenuList>
         </Menu>
       </Box>
 
-      <Modal isOpen={resetTransactionsModal.isOpen} onClose={() => {}}>
+      <Modal isOpen={resetTransactionsModal.isOpen} onClose={() => {
+      }}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Remove all transactions from this session?</ModalHeader>
