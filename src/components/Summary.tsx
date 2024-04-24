@@ -85,7 +85,7 @@ export const Summary: React.FC<Props> = ({ records }) => {
                 {county.name}
                 <span style={{ opacity: 0.6 }}> - {county.taxRate}%</span>
               </Td>
-              <Td isNumeric>{toCurrency(transactions.length)}</Td>
+              <Td isNumeric>{transactions.length}</Td>
               <Td isNumeric>{toCurrency(totals.countyTax)}</Td>
               <Td isNumeric>{toCurrency(totals.foodTax)}</Td>
               <Td isNumeric>{toCurrency(totals.stateTax)}</Td>
@@ -97,7 +97,7 @@ export const Summary: React.FC<Props> = ({ records }) => {
         <Tfoot>
           <Tr>
             <Th>Total</Th>
-            <Th isNumeric>{toCurrency(fullTotals.transactionCount)}</Th>
+            <Th isNumeric>{fullTotals.transactionCount}</Th>
             <Th isNumeric>{toCurrency(fullTotals.countyTax)}</Th>
             <Th isNumeric>{toCurrency(fullTotals.foodTax)}</Th>
             <Th isNumeric>{toCurrency(fullTotals.stateTax)}</Th>

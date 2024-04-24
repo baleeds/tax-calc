@@ -46,6 +46,18 @@ export const Transaction: React.FC<Props> = ({ transaction, deleteTransaction })
 
           <Box>
             <Box as="span" color="gray.600" fontSize="sm" mr={2}>
+              Non-food tax:
+            </Box>
+            ${transaction.taxInfo.nonFoodSubtotal.toFixed(2)}
+          </Box>
+          <Box>
+            <Box as="span" color="gray.600" fontSize="sm" mr={2}>
+              Food tax:
+            </Box>
+            ${transaction.taxInfo.foodTax.toFixed(2)}
+          </Box>
+          <Box fontWeight={'semibold'}>
+            <Box as="span" color="gray.600" fontSize="sm" mr={2}>
               Total:
             </Box>
             ${transaction.taxInfo.total.toFixed(2)}
