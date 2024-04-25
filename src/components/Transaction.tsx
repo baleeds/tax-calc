@@ -4,6 +4,7 @@ import { County, countyMap } from '../data/counties';
 import { TaxInfo } from '../utils/calculateTax';
 import { textPlaceholder } from '../utils/placeholder';
 import { DeleteIcon } from '@chakra-ui/icons';
+import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
 
 export interface Transaction {
   id: string;
@@ -63,17 +64,7 @@ export const Transaction: React.FC<Props> = ({ transaction, deleteTransaction })
             ${transaction.taxInfo.total.toFixed(2)}
           </Box>
         </Box>
-        <Box flexShrink="0" className="transaction__icon-container">
-          <Tooltip label="Remove transaction">
-            <IconButton
-              onClick={() => deleteTransaction(transaction.id)}
-              colorScheme="orange"
-              aria-label="Delete transaction"
-              icon={<DeleteIcon />}
-              variant="ghost"
-            />
-          </Tooltip>
-        </Box>
+        <Box flexShrink="0" className="transaction__icon-container"></Box>
       </Box>
     </Box>
   );

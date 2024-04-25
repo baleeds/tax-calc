@@ -17,6 +17,7 @@
 .display {
   padding: 24px;
   width: calc(100vw - 400px);
+  height: 100vh;
 }
 
 .transaction__icon-container {

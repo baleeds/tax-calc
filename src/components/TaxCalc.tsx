@@ -7,6 +7,7 @@ import { Header } from './Header';
 import { EntryForm } from './EntryForm';
 import { exportJson } from '../data/exportJson';
 import { importJson } from '../data/importJson';
+import { TransactionsGrid } from './TransactionsGrid';
 
 export const TaxCalc: React.FC = () => {
   const toast = useToast();
@@ -54,18 +55,22 @@ export const TaxCalc: React.FC = () => {
     const transactions = storage.transactions.get();
     const dateForName = new Date().toLocaleDateString();
     exportJson(transactions, `tax_calc_transactions_${dateForName}`);
-  }
+  };
 
   const importTransactions = async () => {
     const transactions = await importJson();
     setRecords(transactions);
-  }
+  };
 
   return (
     <div className="main">
       <div className="entry">
         <VStack spacing={5} align="stretch">
-          <Header resetTransactions={resetTransactions} exportTransactions={exportTransactions} importTransactions={importTransactions} />
+          <Header
+            resetTransactions={resetTransactions}
+            exportTransactions={exportTransactions}
+            importTransactions={importTransactions}
+          />
           <EntryForm addTransaction={addTransaction} />
         </VStack>
       </div>
@@ -84,9 +89,7 @@ export const TaxCalc: React.FC = () => {
                     Enter transactions to the left to get started.
                   </Heading>
                 )}
-                {records.map((transaction) => (
-                  <Transaction transaction={transaction} deleteTransaction={deleteTransaction} />
-                ))}
+                {records && <TransactionsGrid transactions={records} deleteTransaction={deleteTransaction} />}
               </VStack>
             </TabPanel>
             <TabPanel>

@@ -3,6 +3,6 @@
   currency: 'USD',
 });
 
-export const toCurrency = (num: number) => {
-  return formatter.format(num);
+export const toCurrency = (num: number | undefined | null) => {
+  return formatter.format(num ?? 0);
 };

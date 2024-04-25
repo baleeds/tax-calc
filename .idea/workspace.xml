@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="432055e1-2ed9-4714-a508-8facedf64351" name="Changes" comment="add: Import and export">
+    <list default="true" id="432055e1-2ed9-4714-a508-8facedf64351" name="Changes" comment="fix: Minor issues">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Summary.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Summary.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TaxCalc.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TaxCalc.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Transaction.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Transaction.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/toCurrency.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/toCurrency.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,9 +22,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2fWeNgxlTBJA4SZoakeLPNBVQlm" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -36,6 +41,8 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/Users/bleeds/code/tax-calc/node_modules/prettier",
+    "settings.editor.selected.configurable": "settings.javascript.prettier",
     "ts.external.directory.path": "/Users/bleeds/code/tax-calc/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
@@ -55,7 +62,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1713921222423</updated>
-      <workItem from="1713921223473" duration="2721000" />
+      <workItem from="1713921223473" duration="3190000" />
+      <workItem from="1714011012075" duration="3036000" />
     </task>
     <task id="LOCAL-00001" summary="add: Import and export">
       <option name="closed" value="true" />
@@ -65,7 +73,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713923025098</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="fix: Minor issues">
+      <option name="closed" value="true" />
+      <created>1713925808987</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1713925808987</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -74,6 +90,7 @@
   <component name="VcsManagerConfiguration">
     <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="false" />
     <MESSAGE value="add: Import and export" />
-    <option name="LAST_COMMIT_MESSAGE" value="add: Import and export" />
+    <MESSAGE value="fix: Minor issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: Minor issues" />
   </component>
 </project>
